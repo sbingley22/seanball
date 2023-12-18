@@ -24,6 +24,7 @@ export default function Player(props) {
   const jumpBoost = useRef(0)
   const gameWon = useRef(false)
   const seanBlob = useRef(undefined)
+  const gamePaused = useRef(false)
 
   // Fetch model
   const { nodes, animations } = useGLTF("/LeeTinker.glb")
@@ -66,10 +67,13 @@ export default function Player(props) {
   useFrame((state, delta) => {
     if (refBody.current === null) return
 
+    //if (gamePaused.current) return
+
+    //console.log(props.touchJump.current)
+
     if (seanBlob.current === undefined) {
       seanBlob.current = findSceneObject(state, "SeanBlob")
     }
-    //console.log(seanBlob.current)
 
     if (gameWon.current) {
       updateAnimation("Happy", animName, setAnimName)
@@ -79,19 +83,25 @@ export default function Player(props) {
     //Keep Physics awake
     refBody.current.wakeUp()
 
-    const { forward, backward, left, right, jump, interact } = getKeys()
+    const { forward, backward, left, right, jump, interact, pause } = getKeys()
 
     // jumping
-    const grounded = jumping(state, delta, refBody, jump, jumpBoost, animName, setAnimName)
+    const grounded = jumping(state, delta, refBody, jump, props.touchJump, jumpBoost, animName, setAnimName)
 
     // movement
-    movement(state, delta, animName, setAnimName, refBody, forward, backward, left, right, grounded)
+    movement(state, delta, animName, setAnimName, refBody, forward, backward, left, right, props.touchRef, grounded)
       
     // update camera
     cameraUpdate(state, delta, refBody)
     
     // Interactable button press
     if (interact) {
+      //console.log()
+      props.resetGame()
+    }
+
+    // Pause Game
+    if (pause) {
       //console.log()
       props.resetGame()
     }
@@ -168,7 +178,7 @@ function updateAnimation(newName, animName, setAnimName) {
 }
 
 
-function jumping(state, delta, refBody, jump, jumpBoost, animName, setAnimName) {
+function jumping(state, delta, refBody, jump, touchJump, jumpBoost, animName, setAnimName) {
   const trans = refBody.current.translation()
   const rayDir = new THREE.Vector3(0, -1, 0);
   trans.y += 0.1
@@ -197,15 +207,17 @@ function jumping(state, delta, refBody, jump, jumpBoost, animName, setAnimName) 
     updateAnimation("Midair", animName, setAnimName)
   }
 
+  const jumping = jump || touchJump.current;
+
   // jumping
-  if (jump && grounded) {
+  if (jumping && grounded) {
     const linvel = refBody.current.linvel()
     linvel.y = 4
     refBody.current.setLinvel(linvel)
   }
 
   // boost jump
-  if (jump && jumpBoost.current > 0) {
+  if (jumping && jumpBoost.current > 0) {
     const linvel = refBody.current.linvel()
     linvel.y += 0.2
     refBody.current.setLinvel(linvel)
@@ -214,11 +226,43 @@ function jumping(state, delta, refBody, jump, jumpBoost, animName, setAnimName) 
   return grounded
 }
 
+function getTouchMovement(touchRef) {
+  const wH = window.innerHeight;
+  const wW = window.innerWidth;
+  let up = false
+  let down = false
+  let left = false
+  let right = false
 
-function movement(state, delta, animName, setAnimName, refBody, forward, backward, left, right, grounded) {
+  if (touchRef.current.x != null){
+    if (touchRef.current.y < wH /2){
+      if (touchRef.current.y < wH / 5) up = true
+      else if (touchRef.current.y > wH / 4) down = true  
+      if (touchRef.current.x < wW / 2.5) left = true
+      else if (touchRef.current.x > wW / 1.5) right = true  
+    }
+  }
+
+  return [up, down, left, right]
+}
+
+function movement(state, delta, animName, setAnimName, refBody, forward, backward, left, right, touchRef, grounded) {
+  const [tUp, tDown, tLeft, tRight] = getTouchMovement(touchRef)
+  console.log(tDown)
+
+  const bk = backward || tDown
+  const fwd = forward || tUp
+  const lft = left || tLeft
+  const rht = right || tRight
+
+  // const bk = backward
+  // const fwd = forward
+  // const lft = left
+  // const rht = right
+  
   //Move in the direction pressed
-  frontVector.set(0, 0, backward - forward)
-  sideVector.set(left - right, 0, 0)
+  frontVector.set(0, 0, bk - fwd)
+  sideVector.set(lft - rht, 0, 0)
   direction.subVectors(frontVector, sideVector).normalize().multiplyScalar(SPEED)
   //direction.subVectors(frontVector, sideVector).normalize().multiplyScalar(SPEED).applyEuler(state.camera.rotation)
 

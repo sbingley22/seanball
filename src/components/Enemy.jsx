@@ -44,7 +44,7 @@ export default function Enemy(props) {
         if (ref.current === null) return
         //console.log(ref)
         // movement
-        movement(state, delta, animName, setAnimName, ref)
+        movement(state, delta, animName, setAnimName, ref, props.difficulty)
     })
 
     return (
@@ -62,7 +62,7 @@ export default function Enemy(props) {
     )    
 }
 
-function movement(state, delta, animName, setAnimName, ref) {
+function movement(state, delta, animName, setAnimName, ref, difficulty) {
     //console.log(ref.current.position)
     const pos = ref.current.position
     if (pos.z < -10) {
@@ -71,7 +71,8 @@ function movement(state, delta, animName, setAnimName, ref) {
     }
     else if (pos.z < 145) {
         setAnimName("Rolling")
-        ref.current.position.z += 0.09
+        if (difficulty === 1) ref.current.position.z += 0.09
+        else ref.current.position.z += 0.05
     }
     else {
         ref.current.position.y -= 0.1

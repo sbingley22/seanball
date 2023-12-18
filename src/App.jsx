@@ -4,8 +4,9 @@ import MainMenu from './components/MainMenu'
 import Game from './components/Game'
 
 function App() {
-  const [mainMenu, setMainMenu] = useState(false)
+  const [mainMenu, setMainMenu] = useState(true)
   const [gameKey, setGameKey] = useState(0)
+  const [difficulty, setDifficulty] = useState(0)
 
   const resetGame = () => {
     setGameKey(prev => prev + 1)
@@ -14,9 +15,9 @@ function App() {
   return (
     <>
       { mainMenu ? 
-        <MainMenu setMainMenu={setMainMenu} /> 
+        <MainMenu setMainMenu={setMainMenu} setDifficulty={setDifficulty} /> 
         : 
-        <Game key={gameKey} resetGame={resetGame} />
+        <Game key={gameKey} resetGame={resetGame} difficulty={difficulty} />
       }
     </>
   )

@@ -2,11 +2,34 @@
 import { Canvas } from '@react-three/fiber'
 import { Stars, KeyboardControls } from "@react-three/drei"
 import { Physics } from '@react-three/rapier';
-import { Suspense } from 'react'
+import { useRef, Suspense } from 'react'
 import Player from './Player'
 import Map from './Map'
 
 export default function Game(props) {
+  // Mobile controls
+  const touchRef = useRef({ x: null, y: null });
+  const touchJump = useRef(false)
+
+  const handleTouchStart = (e) => {
+    const touch = e.touches[0];
+    //console.log(touch.clientY)
+    if (touch.clientY > window.innerHeight /2) {
+      touchJump.current = true
+    }
+
+    touchRef.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleTouchMove = (e) => {
+    const touch = e.touches[0];
+    touchRef.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleTouchEnd = () => {
+    touchJump.current = false
+    touchRef.current = { x: null, y: null }
+  };
 
   return (
     <div className="canvas-container">
@@ -18,9 +41,13 @@ export default function Game(props) {
         { name: "right", keys: ["ArrowRight", "d", "D"] },
         { name: "jump", keys: ["Space"] },
         { name: "interact", keys: ["f", "F"] },
+        { name: "pause", keys: ["t", "T"] },
         ]}
       >
         <Canvas
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
           style={{ width: "100%", height: "100%" }}
           shadows
           camera={{ fov: 45, position: [0, 5, 5] }}
@@ -30,8 +57,8 @@ export default function Game(props) {
               <ambientLight intensity={0.4} />
 
               <Physics gravity={[0, -10, 0]} >
-                <Player resetGame={props.resetGame} />
-                <Map />
+                <Player resetGame={props.resetGame} touchRef={touchRef} touchJump={touchJump} />
+                <Map difficulty={props.difficulty} />
               </Physics>
           </Suspense>
         </Canvas>

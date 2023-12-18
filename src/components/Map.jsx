@@ -4,7 +4,7 @@ import Enemy from "./Enemy"
 import Collectable from "./Collectable"
 import useCollectableStore from "../stores/CollectableStore"
 
-export default function Map() {
+export default function Map({difficulty}) {
   const collectables = useCollectableStore((state) => state.collectables)
 
   return (
@@ -45,7 +45,7 @@ export default function Map() {
         <Box position={[1,-1,155]} scale={[4,1,6]} />
       </group>
 
-      <Enemy position={[0,0,-11]} />
+      <Enemy position={[0,0,-11]} difficulty={difficulty} />
 
       {collectables.map((collectable) => (
         <Collectable 
