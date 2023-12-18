@@ -1,0 +1,14 @@
+#root {
+  box-sizing: border-box;
+  max-width: 1280px;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
