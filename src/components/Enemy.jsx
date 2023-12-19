@@ -15,7 +15,7 @@ export default function Enemy(props) {
     const refBody = useRef()
 
     // Fetch model
-    const { nodes, animations } = useGLTF("/SeanBlob.glb")
+    const { nodes, animations } = useGLTF("/SeanBlob2.glb")
     // Set shadow on nodes
     for (const key in nodes) {
         setShadow(nodes[key]);

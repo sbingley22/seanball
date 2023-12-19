@@ -27,7 +27,7 @@ export default function Player(props) {
   const gamePaused = useRef(false)
 
   // Fetch model
-  const { nodes, animations } = useGLTF("/LeeTinker.glb")
+  const { nodes, animations } = useGLTF("/LeeTinker2.glb")
   // Set shadow on nodes
   for (const key in nodes) {
       setShadow(nodes[key]);
