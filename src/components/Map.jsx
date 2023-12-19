@@ -9,22 +9,10 @@ export default function Map({difficulty}) {
 
   return (
     <>      
-      <directionalLight
-        intensity={1.0}
-        position={[0, 5000, -5000]}
-        castShadow
-        shadow-mapSize={1024}
-      />
-
       <group position={[0,0,0]}>
-        <pointLight position={[0,10,0]} intensity={100} castShadow/>
-        <pointLight position={[0,10,30]} intensity={100} castShadow/>
-        <pointLight position={[0,10,45]} intensity={100} castShadow/>
-        <pointLight position={[0,10,60]} intensity={100} castShadow/>
-        <pointLight position={[0,10,75]} intensity={100} castShadow/>
-        <pointLight position={[0,10,90]} intensity={100} castShadow/>
-        <pointLight position={[0,10,120]} intensity={100} castShadow/>
-        <pointLight position={[0,10,150]} intensity={100} castShadow/>
+        {/* <pointLight position={[0,50,20]} intensity={2500} castShadow/> */}
+        <pointLight position={[0,50,65]} intensity={7500} castShadow/>
+        {/* <pointLight position={[0,50,100]} intensity={2500} castShadow/> */}
       </group>
 
       <group position={[0,0,0]}>

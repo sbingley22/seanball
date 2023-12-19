@@ -6,6 +6,9 @@ import { useKeyboardControls, useGLTF, useAnimations, Sphere } from "@react-thre
 import { CapsuleCollider, RigidBody } from "@react-three/rapier"
 import useCollectableStore from "../stores/CollectableStore"
 
+// Preload the GLB model
+useGLTF.preload('/LeeTinker2.glb');
+
 /*
 Animation Names:
 Happy
@@ -248,7 +251,6 @@ function getTouchMovement(touchRef) {
 
 function movement(state, delta, animName, setAnimName, refBody, forward, backward, left, right, touchRef, grounded) {
   const [tUp, tDown, tLeft, tRight] = getTouchMovement(touchRef)
-  console.log(tDown)
 
   const bk = backward || tDown
   const fwd = forward || tUp

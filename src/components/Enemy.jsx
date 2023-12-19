@@ -4,6 +4,9 @@ import { useRef, useState, useEffect } from "react"
 import { useFrame } from "@react-three/fiber"
 import { useGLTF, useAnimations, Sphere } from "@react-three/drei"
 
+// Preload the GLB model
+useGLTF.preload('/SeanBlob2.glb');
+
 /*
 Animation Names:
 Idle
