@@ -75,7 +75,7 @@ function movement(state, delta, animName, setAnimName, ref, difficulty) {
     else if (pos.z < 145) {
         setAnimName("Rolling")
         if (difficulty === 1) ref.current.position.z += 0.09
-        else ref.current.position.z += 0.05
+        else ref.current.position.z += 0.08
     }
     else {
         ref.current.position.y -= 0.1

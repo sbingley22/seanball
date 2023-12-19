@@ -7,6 +7,9 @@ import useCollectableStore from "../stores/CollectableStore"
 export default function Map({difficulty}) {
   const collectables = useCollectableStore((state) => state.collectables)
 
+  const width = difficulty==1 ? 1 : 2
+  const height = difficulty==1 ? 1 : 1.2
+
   return (
     <>      
       <group position={[0,0,0]}>
@@ -16,21 +19,21 @@ export default function Map({difficulty}) {
       </group>
 
       <group position={[0,0,0]}>
-        <Box position={[0,-1,-20]} scale={[1,1,24]} />
-        <Box position={[0,-1,12]} scale={[1,1,4]} />
-        <Box position={[1,-1,20]} scale={[1,1,2]} />
-        <Box position={[-1,-1,30]} scale={[1,1,1]} />
-        <Box position={[-1,-1,36]} scale={[1,1,2]} />
-        <Box position={[2,-1,43]} scale={[1,1,1.5]} />
-        <Box position={[0,-1,55]} scale={[1,1,6]} />
-        <Box position={[0,-1,75]} scale={[1,1,8]} />
-        <Box position={[-1,-1,92]} scale={[0.5,1,4]} />
-        <Box position={[1,-1,100]} scale={[1,1,2]} />
-        <Box position={[-2,-1,110]} scale={[0.75,1,1.75]} />
-        <Box position={[1,-1,120]} scale={[0.75,1,2]} />
-        <Box position={[-2,-1,126]} scale={[1,1,1.75]} />
-        <Box position={[1,-1,135]} scale={[0.85,1,8.5]} />
-        <Box position={[1,-1,155]} scale={[4,1,6]} />
+        <Box position={[0,-1,-20]} scale={[1*width,1,24*height]} />
+        <Box position={[0,-1,12]} scale={[1*width,1,4*height]} />
+        <Box position={[1,-1,20]} scale={[1*width,1,2*height]} />
+        <Box position={[-1,-1,30]} scale={[1*width,1,1*height]} />
+        <Box position={[-1,-1,36]} scale={[1*width,1,2*height]} />
+        <Box position={[2,-1,43]} scale={[1*width,1,1.5*height]} />
+        <Box position={[0,-1,55]} scale={[1*width,1,6*height]} />
+        <Box position={[0,-1,75]} scale={[1*width,1,8*height]} />
+        <Box position={[-1,-1,92]} scale={[0.5*width,1,4*height]} />
+        <Box position={[1,-1,100]} scale={[1*width,1,2*height]} />
+        <Box position={[-2,-1,110]} scale={[0.75*width,1,1.75*height]} />
+        <Box position={[1,-1,120]} scale={[0.75*width,1,2*height]} />
+        <Box position={[-2,-1,126]} scale={[1*width,1,1.75*height]} />
+        <Box position={[1,-1,135]} scale={[0.85*width,1,8.5*height]} />
+        <Box position={[1,-1,155]} scale={[4*width,1,6*height]} />
       </group>
 
       <Enemy position={[0,0,-11]} difficulty={difficulty} />

@@ -12,18 +12,31 @@ export default function Game(props) {
   const touchJump = useRef(false)
 
   const handleTouchStart = (e) => {
-    const touch = e.touches[0];
-    //console.log(touch.clientY)
-    if (touch.clientY > window.innerHeight /2) {
-      touchJump.current = true
+    e.preventDefault();
+    const touches = e.touches;
+    
+    for (let i = 0; i < touches.length; i++) {
+      const touch = touches[i];
+      if (touch.clientY > window.innerHeight /2) {
+        touchJump.current = true
+      }
+      else
+      {
+        touchRef.current = { x: touch.clientX, y: touch.clientY };
+      }
     }
-
-    touchRef.current = { x: touch.clientX, y: touch.clientY };
   };
 
   const handleTouchMove = (e) => {
-    const touch = e.touches[0];
-    touchRef.current = { x: touch.clientX, y: touch.clientY };
+    e.preventDefault();
+    const touches = e.touches;
+
+    for (let i = 0; i < touches.length; i++) {
+      const touch = touches[i];
+      if (touch.clientY < window.innerHeight /2) {
+        touchRef.current = { x: touch.clientX, y: touch.clientY };
+      }
+    }
   };
 
   const handleTouchEnd = () => {

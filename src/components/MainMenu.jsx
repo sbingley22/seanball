@@ -9,7 +9,7 @@ export default function MainMenu({setMainMenu, setDifficulty}) {
 
     return (
         <div className="main-menu">
-            <h1>Sean Balls guna get ya!</h1>
+            <h1>Sean Ball Hungry!</h1>
             <p>
                 Sean ball wants to flatten you into a pancake then eat you. <strong>Dont let him!</strong>
             </p>
