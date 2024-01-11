@@ -19,7 +19,6 @@ export default function Enemy(props) {
 
     // Fetch model
     const { nodes, animations } = useGLTF("/SeanBlob2.glb")
-    // Set shadow on nodes
     for (const key in nodes) {
         setShadow(nodes[key]);
     }
@@ -55,10 +54,6 @@ export default function Enemy(props) {
           <primitive
             object={nodes.Scene}
           />
-  
-          <Sphere scale={[0.3,16,16]} position={[0,0.4,0]} castShadow name="Invisible">
-            <shadowMaterial transparent opacity={0.2} />
-          </Sphere>
         </group>
       </group>
     )    
@@ -84,8 +79,8 @@ function movement(state, delta, animName, setAnimName, ref, difficulty) {
 // Set model node attributes
 const setShadow = (object) => {
     if (object.isMesh || object.isSkinnedMesh) {
-      //object.castShadow = true;
-      object.receiveShadow = true;
+      object.castShadow = false;
+      object.receiveShadow = false;
     }
     if (object.children) {
       object.children.forEach((child) => {
