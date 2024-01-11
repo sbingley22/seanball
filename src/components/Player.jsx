@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/no-unknown-property */
 import * as THREE from "three"
 import { useRef, useState, useEffect } from "react"
@@ -65,6 +66,10 @@ export default function Player(props) {
     console.log(score)
   }
 
+  const vec3 = new THREE.Vector3()
+  const vec3b = new THREE.Vector3()
+  const quat = new THREE.Quaternion()
+  const quat2 = new THREE.Quaternion()
 
   // Game Logic
   useFrame((state, delta) => {
@@ -89,13 +94,13 @@ export default function Player(props) {
     const { forward, backward, left, right, jump, interact, pause } = getKeys()
 
     // jumping
-    const grounded = jumping(state, delta, refBody, jump, props.touchJump, jumpBoost, animName, setAnimName)
+    const grounded = jumping(state, delta, vec3, refBody, jump, props.touchJump, jumpBoost, animName, setAnimName)
 
     // movement
-    movement(state, delta, animName, setAnimName, refBody, forward, backward, left, right, props.touchRef, grounded)
+    movement(state, delta, vec3, quat, quat2, animName, setAnimName, refBody, forward, backward, left, right, props.touchRef, grounded)
       
     // update camera
-    cameraUpdate(state, delta, refBody)
+    cameraUpdate(state, delta, refBody, vec3, vec3b)
     
     // Interactable button press
     if (interact) {
@@ -181,9 +186,9 @@ function updateAnimation(newName, animName, setAnimName) {
 }
 
 
-function jumping(state, delta, refBody, jump, touchJump, jumpBoost, animName, setAnimName) {
+function jumping(state, delta, vec3, refBody, jump, touchJump, jumpBoost, animName, setAnimName) {
   const trans = refBody.current.translation()
-  const rayDir = new THREE.Vector3(0, -1, 0);
+  const rayDir = vec3.set(0, -1, 0);
   trans.y += 0.1
 
   // grounded
@@ -249,24 +254,18 @@ function getTouchMovement(touchRef) {
   return [up, down, left, right]
 }
 
-function movement(state, delta, animName, setAnimName, refBody, forward, backward, left, right, touchRef, grounded) {
+function movement(state, delta, vec3, quat, quat2, animName, setAnimName, refBody, forward, backward, left, right, touchRef, grounded) {
   const [tUp, tDown, tLeft, tRight] = getTouchMovement(touchRef)
 
   const bk = backward || tDown
   const fwd = forward || tUp
   const lft = left || tLeft
   const rht = right || tRight
-
-  // const bk = backward
-  // const fwd = forward
-  // const lft = left
-  // const rht = right
   
   //Move in the direction pressed
   frontVector.set(0, 0, bk - fwd)
   sideVector.set(lft - rht, 0, 0)
   direction.subVectors(frontVector, sideVector).normalize().multiplyScalar(SPEED)
-  //direction.subVectors(frontVector, sideVector).normalize().multiplyScalar(SPEED).applyEuler(state.camera.rotation)
 
   refBody.current.setLinvel({ x: direction.x, y: refBody.current.linvel().y, z: direction.z })
 
@@ -276,11 +275,11 @@ function movement(state, delta, animName, setAnimName, refBody, forward, backwar
 
     // Rotate to the correct direction
     const angle = Math.atan2(direction.x, direction.z);
-    const rotation = new THREE.Quaternion();
-    rotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), angle);
+    const rotation = quat;
+    rotation.setFromAxisAngle(vec3.set(0, 1, 0), angle);
 
     // Smooth rotation with lerp
-    const lerpedRotation = new THREE.Quaternion(
+    const lerpedRotation = quat2.set(
       refBody.current.rotation().x,
       refBody.current.rotation().y,
       refBody.current.rotation().z,
@@ -296,12 +295,12 @@ function movement(state, delta, animName, setAnimName, refBody, forward, backwar
   }
 }
 
-function cameraUpdate(state, delta, refBody) {
+function cameraUpdate(state, delta, refBody, vec3, vec3b) {
   // camera offsets
   const viewY = 5
   const viewZ = 15
   // player translation
-  const trans = new THREE.Vector3(
+  const trans = vec3.set(
     refBody.current.translation().x,
     refBody.current.translation().y,
     refBody.current.translation().z,
@@ -309,9 +308,9 @@ function cameraUpdate(state, delta, refBody) {
   // look infront of movement direction
   trans.addScaledVector(direction, 1.0)
   // add camera offsets
-  const targetPosition = new THREE.Vector3(trans.x, trans.y + viewY, trans.z + viewZ);
+  const targetPosition = vec3b.set(trans.x, trans.y + viewY, trans.z + viewZ);
   // look infront of cameras current position
-  const lookAt = new THREE.Vector3(
+  const lookAt = vec3.set(
     state.camera.position.x,
     state.camera.position.y - viewY,
     state.camera.position.z -viewZ

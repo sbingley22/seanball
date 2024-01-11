@@ -1,5 +1,5 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/no-unknown-property */
-import * as THREE from "three"
 import { useRef, useState, useEffect } from "react"
 import { useFrame } from "@react-three/fiber"
 import { useGLTF, useAnimations, Sphere } from "@react-three/drei"
@@ -22,8 +22,7 @@ export default function Enemy(props) {
     // Set shadow on nodes
     for (const key in nodes) {
         setShadow(nodes[key]);
-      }
-    //console.log(nodes)
+    }
   
     // Extract animation actions
     const { ref, actions, names } = useAnimations(animations)
@@ -57,7 +56,7 @@ export default function Enemy(props) {
             object={nodes.Scene}
           />
   
-          <Sphere args={[0.3,16,16]} position={[0,0.4,0]} castShadow name="Invisible">
+          <Sphere scale={[0.3,16,16]} position={[0,0.4,0]} castShadow name="Invisible">
             <shadowMaterial transparent opacity={0.2} />
           </Sphere>
         </group>

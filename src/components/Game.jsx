@@ -1,6 +1,7 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/no-unknown-property */
 import { Canvas } from '@react-three/fiber'
-import { Stars, KeyboardControls } from "@react-three/drei"
+import { Stars, KeyboardControls, Stats } from "@react-three/drei"
 import { Physics } from '@react-three/rapier';
 import { useRef, Suspense } from 'react'
 import Player from './Player'
@@ -74,6 +75,7 @@ export default function Game(props) {
                 <Map difficulty={props.difficulty} />
               </Physics>
           </Suspense>
+          <Stats />
         </Canvas>
       </KeyboardControls>
     </div>
