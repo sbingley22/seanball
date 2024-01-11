@@ -29,7 +29,7 @@ export default function Game(props) {
   };
 
   const handleTouchMove = (e) => {
-    e.preventDefault();
+    //e.preventDefault();
     const touches = e.touches;
 
     for (let i = 0; i < touches.length; i++) {
@@ -40,7 +40,8 @@ export default function Game(props) {
     }
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (e) => {
+    e.preventDefault()
     touchJump.current = false
     touchRef.current = { x: null, y: null }
   };
